@@ -1,0 +1,85 @@
+/* src/components/SearchBox/SearchBox.css */
+.search-container {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin-bottom: 2rem;
+}
+
+.search-box {
+  width: 100%;
+}
+
+.search-box .MuiOutlinedInput-root {
+  border-radius: 25px;
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid #0b5ed7;
+  padding: 0 8px;
+}
+
+.search-box .MuiOutlinedInput-notchedOutline {
+  border: none !important;
+}
+
+.search-box .MuiInputBase-input {
+  text-align: right;
+  direction: rtl;
+  padding: 12px 8px;
+  color: #000;
+}
+
+.search-box .MuiInputLabel-root {
+  right: 20px;
+  left: auto;
+  transform-origin: right;
+  color: #666;
+  font-weight: 500;
+}
+
+.search-box .MuiInputLabel-shrink {
+  transform: translate(-10px, -6px) scale(0.75);
+  background: white;
+  padding: 0 8px;
+  color: #0b5ed7;
+  font-weight: 600;
+}
+
+.search-box .MuiInputAdornment-root {
+  margin-left: 4px;
+  color: #666;
+}
+
+/* برای حالت فوکوس */
+.search-box .MuiOutlinedInput-root.Mui-focused {
+  border: 1px solid #0b5ed7;
+  background: rgba(255, 255, 255, 1);
+}
+
+.search-box .MuiOutlinedInput-root.Mui-focused .MuiInputAdornment-root {
+  color: #0b5ed7;
+}
+
+@media (min-width: 600px) {
+  .search-box {
+    width: 400px;
+  }
+}
+
+/* تم تاریک */
+[data-mui-color-scheme="dark"] .search-box .MuiOutlinedInput-root {
+  background: rgba(30, 30, 30, 0.9);
+  border: 1px solid #0b5ed7;
+}
+
+[data-mui-color-scheme="dark"] .search-box .MuiInputBase-input {
+  color: #fff;
+}
+
+[data-mui-color-scheme="dark"] .search-box .MuiInputLabel-root {
+  color: rgba(255, 255, 255, 0.7); 
+}
+
+[data-mui-color-scheme="dark"] .search-box .MuiInputLabel-shrink {
+  background: #1a1a1a;
+  color: #0b5ed7;
+}

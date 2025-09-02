@@ -1,0 +1,32 @@
+/* src/components/AboutContent/AboutContent.css */
+.about-container {
+  margin-top: 1rem;
+  width: 100%;
+}
+
+.about-title {
+  text-align: right;
+  margin-bottom: 1rem;
+}
+
+.about-description {
+  text-align: right;
+  text-align: justify;
+  margin-bottom: 2rem;
+}
+
+.about-subtitle {
+  text-align: right;
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+}
+
+.about-list {
+  text-align: right;
+  direction: rtl;
+  padding-right: 1.5rem;
+}
+
+.about-list li {
+  margin-bottom: 0.5rem;
+}

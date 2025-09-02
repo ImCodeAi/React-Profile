@@ -1,0 +1,108 @@
+/* src/components/ContactForm/ContactForm.css */
+.contact-form-container {
+  width: 100%;
+  margin-top: 2rem; /* افزایش فاصله */
+  padding: 0 1rem; /* اضافه کردن padding */
+}
+
+.contact-title {
+  text-align: right;
+  margin-bottom: 1.5rem; /* افزایش فاصله */
+  font-size: 1.5rem; /* کمی بزرگتر */
+}
+
+.contact-subtitle {
+  text-align: right;
+  margin-top:10px !important;
+  margin-bottom: 1rem !important; /* افزایش فاصله */
+  opacity: 0.8;
+  line-height: 1.6;
+}
+
+.contact-form {
+  width: 100%;
+  max-width: 600px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem; /* افزایش فاصله بین فیلدها */
+}
+
+.contact-field {
+  width: 100%;
+  margin-bottom: 0; /* حذف margin-bottom چون از gap استفاده می‌کنیم */
+}
+
+.contact-field .MuiInputBase-input {
+  text-align: right;
+  direction: rtl;
+  padding: 16px 14px; /* افزایش padding برای فضای بهتر */
+  padding-left: 14px; /* اضافه کردن این خط */
+  padding-right: 14px; /* اضافه کردن این خط */
+
+}
+
+.contact-field .MuiInputLabel-root {
+  left: 0; /* تغییر از right به left */
+  right: auto; /* تغییر از auto */
+  transform-origin: left; /* تغییر از right به left */
+  margin-bottom: 8px;
+  padding-right: 0; /* حذف padding-right */
+  padding-left: 14px; /* اضافه کردن padding-left */
+  padding-top: 6px;
+}
+.contact-field .MuiInputLabel-shrink {
+  transform: translate(0, -6px) scale(0.75) !important; /* تغییر translate */
+  padding-left: 18px; /* اضافه کردن padding */
+}
+.contact-field .MuiOutlinedInput-root {
+  border-radius: 12px; /* گوشه‌های گردتر */
+}
+
+.send-button {
+  margin-top: 2rem; /* افزایش فاصله */
+  padding: 12px 24px;
+  border-radius: 12px;
+  font-weight: 600;
+  align-self: flex-end; /* دکمه در سمت راست */
+}
+
+/* ریسپانسیو */
+@media (max-width: 768px) {
+  .contact-form-container {
+    padding: 0 0.5rem;
+    margin-top: 1.5rem;
+  }
+  
+  .contact-title {
+    font-size: 1.3rem;
+    margin-bottom: 1rem;
+  }
+  
+  .contact-subtitle {
+    margin-bottom: 2rem;
+  }
+  
+  .contact-form {
+    gap: 1.5rem;
+  }
+  
+  .send-button {
+    margin-top: 1.5rem;
+    width: 100%; /* دکمه full-width در موبایل */
+  }
+}
+
+@media (max-width: 480px) {
+  .contact-form-container {
+    padding: 0 0.25rem;
+  }
+  
+  .contact-title {
+    font-size: 1.2rem;
+  }
+  
+  .contact-field .MuiInputBase-input {
+    padding: 14px 12px;
+  }
+}

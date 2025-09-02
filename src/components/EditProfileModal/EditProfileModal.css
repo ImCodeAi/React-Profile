@@ -1,0 +1,135 @@
+/* src/components/EditProfileModal/EditProfileModal.css */
+.edit-modal-title {
+  text-align: right;
+}
+
+.edit-form {
+  margin-top: 1rem;
+  gap: 1.5rem;
+}
+
+.edit-field {
+  width: 100%;
+}
+
+.edit-field .MuiOutlinedInput-root {
+  border-radius: 25px;
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid #0b5ed7;
+  padding: 0 8px;
+}
+
+.edit-field .MuiOutlinedInput-notchedOutline {
+  border: none !important;
+}
+
+.edit-field .MuiInputBase-input {
+  text-align: right;
+  direction: rtl;
+  padding: 16px 14px;
+  color: #000;
+}
+
+.edit-field .MuiInputLabel-root {
+  right: 20px;
+  left: auto;
+  transform-origin: right;
+  color: #666;
+  font-weight: 500;
+  padding-right: 14px;
+}
+
+.edit-field .MuiInputLabel-shrink {
+  transform: translate(-10px, -6px) scale(0.75);
+  background: white;
+  padding: 0 8px;
+  color: #0b5ed7;
+  font-weight: 600;
+}
+
+/* برای حالت فوکوس */
+.edit-field .MuiOutlinedInput-root.Mui-focused {
+  border: 1px solid #0b5ed7;
+  background: rgba(255, 255, 255, 1);
+}
+
+.logo-section {
+  text-align: center;
+  margin-top: 1rem;
+}
+
+.logo-title {
+  text-align: right;
+  margin-bottom: 1rem;
+}
+
+.logo-preview {
+  width: 96px;
+  height: 96px;
+  margin: 0 auto 1rem auto;
+}
+
+.upload-button {
+  margin-top: 1rem;
+  border-radius: 25px;
+}
+
+/* تم تاریک */
+[data-mui-color-scheme="dark"] .edit-field .MuiOutlinedInput-root {
+  background: rgba(30, 30, 30, 0.9);
+  border: 1px solid #0b5ed7;
+}
+
+[data-mui-color-scheme="dark"] .edit-field .MuiInputBase-input {
+  color: #fff;
+}
+
+[data-mui-color-scheme="dark"] .edit-field .MuiInputLabel-root {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+[data-mui-color-scheme="dark"] .edit-field .MuiInputLabel-shrink {
+  background: #1a1a1a;
+  color: #0b5ed7;
+}
+
+[data-mui-color-scheme="dark"] .upload-button {
+  border-color: #0b5ed7;
+  color: #0b5ed7;
+}
+
+[data-mui-color-scheme="dark"] .upload-button:hover {
+  background: rgba(11, 94, 215, 0.1);
+}
+
+/* ریسپانسیو */
+@media (max-width: 768px) {
+  .edit-field .MuiInputBase-input {
+    padding: 14px 12px;
+  }
+  
+  .edit-field .MuiInputLabel-root {
+    right: 15px;
+  }
+  
+  .logo-preview {
+    width: 80px;
+    height: 80px;
+  }
+}
+
+@media (max-width: 480px) {
+  .edit-field .MuiInputBase-input {
+    padding: 12px 10px;
+  }
+  
+  .edit-field .MuiInputLabel-root {
+    right: 12px;
+    font-size: 0.9rem;
+  }
+  
+  .logo-preview {
+    width: 70px;
+    height: 70px;
+  }
+}
