@@ -145,3 +145,16 @@
 [data-mui-color-scheme="dark"] .post-excerpt {
   opacity: 0.8;
 }
+@keyframes loading {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+/* برای تم تاریک - overlay لودینگ */
+[data-mui-color-scheme="dark"] .post-card-image::after {
+  background: linear-gradient(90deg, rgba(42,42,42,0.7) 25%, rgba(58,58,58,0.7) 50%, rgba(42,42,42,0.7) 75%);
+}

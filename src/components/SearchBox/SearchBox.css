@@ -59,6 +59,16 @@
   color: #0b5ed7;
 }
 
+/* استایل برای دکمه پاک کردن */
+.search-box .MuiIconButton-root {
+  color: #666;
+  transition: color 0.2s ease;
+}
+
+.search-box .MuiIconButton-root:hover {
+  color: #0b5ed7;
+}
+
 @media (min-width: 600px) {
   .search-box {
     width: 400px;
@@ -82,4 +92,13 @@
 [data-mui-color-scheme="dark"] .search-box .MuiInputLabel-shrink {
   background: #1a1a1a;
   color: #0b5ed7;
+}
+
+[data-mui-color-scheme="dark"] .search-box .MuiIconButton-root {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+[data-mui-color-scheme="dark"] .search-box .MuiIconButton-root:hover {
+  color: #0b5ed7;
+  background-color: rgba(11, 94, 215, 0.2);
 }
