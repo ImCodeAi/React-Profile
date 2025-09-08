@@ -1,5 +1,4 @@
 // src/App.jsx
-
 import React, { useMemo, useState, useCallback, useEffect } from "react";
 import {
   ThemeProvider,
@@ -28,16 +27,16 @@ import Footer from "./components/Footer/Footer";
 import TabsSection from "./components/TabsSection/TabsSection";
 import AboutContent from "./components/AboutContent/AboutContent";
 import PostSkeleton from "./components/PostSkeleton/PostSkeleton";
-import Loader from "./components/Loader/Loader"; // اضافه شده
+import Loader from "./components/Loader/Loader";
 
 // داده‌های ثابت پروژه
 import { POSTS, INITIAL_PROFILE } from "./data/constants";
-import avatarImg from "./assets/logoai.png";
 
 // ماژول درخواست‌های API
 import { fetchPosts } from "./requests/requestPost";
 
-
+// Context سبد خرید
+import { CartProvider } from "./contexts/CartContext";
 
 function App() {
   // Stateهای مدیریت وضعیت
@@ -49,10 +48,9 @@ function App() {
   const [snackOpen, setSnackOpen] = useState(false);
   const [query, setQuery] = useState("");
   const [profile, setProfile] = useState(INITIAL_PROFILE);
-  const [previewLogo, setPreviewLogo] = useState(avatarImg);
+  const [previewLogo, setPreviewLogo] = useState(null);
   const [editOpen, setEditOpen] = useState(false);
-  const [initialLoading, setInitialLoading] = useState(false); // اضافه شده
-
+  const [initialLoading, setInitialLoading] = useState(true);
   const [posts, setPosts] = useState(POSTS);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -70,7 +68,7 @@ function App() {
     setName("");
     setMessage("");
     setSnackOpen(true);
-  }, [setName, setMessage, setSnackOpen]);
+  }, []);
 
   const handleLogoChange = useCallback((e) => {
     const file = e.target.files[0];
@@ -86,6 +84,7 @@ function App() {
     palette: {
       mode: dark ? "dark" : "light",
       primary: { main: "#0b5ed7" },
+      secondary: { main: "#ff4081" },
       background: {
         default: dark ? '#1a1a1a' : '#f5f5f5',
         paper: dark ? '#2a2a2a' : '#ffffff'
@@ -94,24 +93,29 @@ function App() {
     typography: {
       fontFamily: "'Vazirmatn', 'IRANSansX', 'Roboto', 'Tahoma', 'Segoe UI', 'Arial', sans-serif",
     },
+    shape: {
+      borderRadius: 12
+    }
   }), [dark]);
 
   // دریافت پست‌ها از API با استفاده از ماژول جداگانه
   useEffect(() => {
     const getPosts = async () => {
       const startTime = Date.now();
-      const minLoadingTime = 1000; // حداقل ۲ ثانیه نمایش لودر
+      const minLoadingTime = 2000; // حداقل ۲ ثانیه نمایش لودر
 
       try {
         setLoading(true);
+        setInitialLoading(true);
 
-        // تاخیر عمدی ۱.۵ ثانیه‌ای برای نمایش اسکلت‌ها
-        await new Promise(resolve => setTimeout(resolve, 1000));
+        // تاخیر عمدی برای نمایش اسکلت‌ها
+        await new Promise(resolve => setTimeout(resolve, 1500));
 
         const apiPosts = await fetchPosts();
         setPosts(apiPosts);
         setError(null);
       } catch (err) {
+        console.error('Error fetching posts:', err);
         setError('خطا در دریافت پست‌ها - از داده محلی استفاده می‌شود');
         setPosts(POSTS);
       } finally {
@@ -119,13 +123,11 @@ function App() {
         const remainingTime = minLoadingTime - elapsedTime;
 
         if (remainingTime > 0) {
-          // اگر زمان باقی مونده، صبر کن سپس لودینگ رو غیرفعال کن
           setTimeout(() => {
             setLoading(false);
             setInitialLoading(false);
           }, remainingTime);
         } else {
-          // اگر زمان کافی گذشته، بلافاصله غیرفعال کن
           setLoading(false);
           setInitialLoading(false);
         }
@@ -134,7 +136,6 @@ function App() {
 
     getPosts();
   }, []);
-
 
   // فیلتر کردن پست‌ها بر اساس جستجو (فقط عنوان)
   const filteredPosts = useMemo(() => {
@@ -183,159 +184,170 @@ function App() {
   }
 
   return (
-    <ThemeProvider theme={theme}>
-      <CssBaseline />
+    <CartProvider>
+      <ThemeProvider theme={theme}>
+        <CssBaseline />
 
-      <GlobalStyles
-        styles={{
-          body: {
-            backgroundColor: dark ? '#1a1a1a' : '#f5f5f5',
-            margin: 0,
-            padding: 0,
-            minHeight: '100vh'
-          },
-          html: {
-            backgroundColor: dark ? '#1a1a1a' : '#f5f5f5',
-            height: '100%'
-          },
-          '#root': {
-            backgroundColor: dark ? '#1a1a1a' : '#f5f5f5',
-            minHeight: '100vh'
-          }
-        }}
-      />
-
-      <Box sx={{
-        minHeight: "100vh",
-        bgcolor: "transparent",
-        direction: "rtl",
-        background: "transparent"
-      }}>
-
-        <Header dark={dark} setDark={setDark} />
-
-        <Box sx={{
-          height: { xs: 160, md: 240 },
-          backgroundImage: "linear-gradient(180deg, rgba(11,94,215,0.15), rgba(11,94,215,0.05)), url('https://images.unsplash.com/photo-1531297484001-80022131f5a1?auto=format&fit=crop&w=1600&q=80')",
-          backgroundSize: "cover",
-          backgroundPosition: "center",
-          width: "100%",
-        }} />
-
-        <Box sx={{ width: "100%", px: 2 }}>
-
-          <ProfileCard
-            profile={profile}
-            previewLogo={previewLogo}
-            onEditOpen={() => setEditOpen(true)}
-            onTabChange={setTab}
-          />
-
-          <Box sx={{
-            bgcolor: "background.paper",
-            borderRadius: 2,
-            p: 2,
-            width: "100%",
-            boxShadow: dark ? '0 4px 20px rgba(0,0,0,0.3)' : '0 4px 20px rgba(0,0,0,0.1)'
-          }}>
-
-            <TabsSection tab={tab} setTab={setTab} />
-
-            {tab === 0 && (
-              <Box>
-                <div className="search-container">
-                  <SearchBox query={query} setQuery={setQuery} />
-                </div>
-
-                {loading && (
-                  <Box sx={{
-                    display: 'flex',
-                    flexWrap: 'wrap',
-                    justifyContent: 'center',
-                    ...(dark && { 'data-theme': 'dark' }) // اضافه کردن تم تاریک اگر فعال باشد
-                  }}>
-                    <PostSkeleton />
-                    <PostSkeleton />
-                    <PostSkeleton />
-                    <PostSkeleton />
-                    <PostSkeleton />
-                  </Box>
-                )}
-
-                {error && (
-                  <Box textAlign="center" py={4}>
-                    <Typography color="error" style={{ textAlign: 'center', direction: 'rtl' }}>
-                      {error}
-                    </Typography>
-                  </Box>
-                )}
-
-                {!loading && !error && (
-                  <div className="posts-center-container">
-                    <Grid container spacing={2} className="posts-grid">
-                      {/* پیام وقتی نتیجه‌ای نیست */}
-                      {filteredPosts.length === 0 && query && (
-                        <Grid item xs={12} style={{ textAlign: 'center', padding: '2rem', direction: 'rtl' }}>
-                          <Typography variant="h6" color="textSecondary" gutterBottom > 
-                            🔍 نتیجه‌ای یافت نشد
-                          </Typography>
-                          
-                        </Grid>
-                      )}
-
-                      {/* نمایش پست‌ها */}
-                      {filteredPosts.map((post) => (
-                        <Grid item key={post.id}>
-                          <PostCard post={post} onOpen={setSelectedPost} />
-                        </Grid>
-                      ))}
-                    </Grid>
-                  </div>
-                )}
-
-
-              </Box>
-            )}
-
-            {tab === 1 && <AboutContent />}
-
-            {tab === 2 && (
-              <ContactForm
-                name={name}
-                message={message}
-                setName={handleSetName}
-                setMessage={handleSetMessage}
-                onSend={handleSendMessage}
-              />
-            )}
-          </Box>
-        </Box>
-
-        <PostModal post={selectedPost} onClose={() => setSelectedPost(null)} />
-
-        <EditProfileModal
-          open={editOpen}
-          onClose={() => setEditOpen(false)}
-          profile={profile}
-          setProfile={setProfile}
-          previewLogo={previewLogo}
-          onLogoChange={handleLogoChange}
+        <GlobalStyles
+          styles={{
+            body: {
+              backgroundColor: dark ? '#1a1a1a' : '#f5f5f5',
+              margin: 0,
+              padding: 0,
+              minHeight: '100vh',
+              transition: 'background-color 0.3s ease'
+            },
+            html: {
+              backgroundColor: dark ? '#1a1a1a' : '#f5f5f5',
+              height: '100%'
+            },
+            '#root': {
+              backgroundColor: dark ? '#1a1a1a' : '#f5f5f5',
+              minHeight: '100vh'
+            }
+          }}
         />
 
-        <Snackbar
-          open={snackOpen}
-          autoHideDuration={3000}
-          onClose={() => setSnackOpen(false)}
-          anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
-        >
-          <Alert onClose={() => setSnackOpen(false)} severity="success">
-            پیام با موفقیت ارسال شد!
-          </Alert>
-        </Snackbar>
+        <Box sx={{
+          minHeight: "100vh",
+          bgcolor: "transparent",
+          direction: "rtl",
+          background: "transparent",
+          transition: 'all 0.3s ease'
+        }}>
 
-        <Footer />
-      </Box>
-    </ThemeProvider>
+          <Header dark={dark} setDark={setDark} />
+          
+          <Box sx={{ width: "100%", px: 2, mt: 2 }}>
+            <Box sx={{
+              display: 'flex',
+              justifyContent: 'center',
+              width: '100%',
+              px: 1
+            }}>
+              <ProfileCard
+                profile={profile}
+                previewLogo={previewLogo}
+                onEditOpen={() => setEditOpen(true)}
+                onTabChange={setTab}
+              />
+            </Box>
+
+            <Box sx={{
+              bgcolor: "background.paper",
+              borderRadius: 3,
+              p: 3,
+              mt: 2,
+              width: "100%",
+              boxShadow: dark 
+                ? '0 8px 32px rgba(0,0,0,0.3)' 
+                : '0 8px 32px rgba(0,0,0,0.1)',
+              transition: 'all 0.3s ease'
+            }}>
+
+              <TabsSection tab={tab} setTab={setTab} />
+
+              {tab === 0 && (
+                <Box sx={{ mt: 3 }}>
+                  <div className="search-container">
+                    <SearchBox query={query} setQuery={setQuery} />
+                  </div>
+
+                  {loading && (
+                    <Box sx={{
+                      display: 'flex',
+                      flexWrap: 'wrap',
+                      justifyContent: 'center',
+                      gap: 2,
+                      mt: 3
+                    }}>
+                      {[1, 2, 3, 4, 5].map((item) => (
+                        <PostSkeleton key={item} />
+                      ))}
+                    </Box>
+                  )}
+
+                  {error && (
+                    <Box textAlign="center" py={4}>
+                      <Alert severity="warning" sx={{ mb: 2 }}>
+                        <Typography variant="body2">
+                          {error}
+                        </Typography>
+                      </Alert>
+                    </Box>
+                  )}
+
+                  {!loading && !error && (
+                    <div className="posts-center-container">
+                      <Grid container spacing={3} className="posts-grid">
+                        {/* پیام وقتی نتیجه‌ای نیست */}
+                        {filteredPosts.length === 0 && query && (
+                          <Grid item xs={12} sx={{ textAlign: 'center', py: 4 }}>
+                            <Typography variant="h6" color="textSecondary" gutterBottom>
+                              🔍 نتیجه‌ای یافت نشد
+                            </Typography>
+                            <Typography variant="body2" color="textSecondary">
+                              عبارت جستجو شده: "{query}"
+                            </Typography>
+                          </Grid>
+                        )}
+
+                        {/* نمایش پست‌ها */}
+                        {filteredPosts.map((post) => (
+                          <Grid item xs={12} sm={6} md={4} key={post.id}>
+                            <PostCard post={post} onOpen={setSelectedPost} />
+                          </Grid>
+                        ))}
+                      </Grid>
+                    </div>
+                  )}
+                </Box>
+              )}
+
+              {tab === 1 && <AboutContent />}
+
+              {tab === 2 && (
+                <ContactForm
+                  name={name}
+                  message={message}
+                  setName={handleSetName}
+                  setMessage={handleSetMessage}
+                  onSend={handleSendMessage}
+                />
+              )}
+            </Box>
+          </Box>
+
+          <PostModal post={selectedPost} onClose={() => setSelectedPost(null)} />
+
+          <EditProfileModal
+            open={editOpen}
+            onClose={() => setEditOpen(false)}
+            profile={profile}
+            setProfile={setProfile}
+            previewLogo={previewLogo}
+            onLogoChange={handleLogoChange}
+          />
+
+          <Snackbar
+            open={snackOpen}
+            autoHideDuration={3000}
+            onClose={() => setSnackOpen(false)}
+            anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+          >
+            <Alert 
+              onClose={() => setSnackOpen(false)} 
+              severity="success"
+              sx={{ width: '100%' }}
+            >
+              پیام با موفقیت ارسال شد!
+            </Alert>
+          </Snackbar>
+
+          <Footer />
+        </Box>
+      </ThemeProvider>
+    </CartProvider>
   );
 }
 

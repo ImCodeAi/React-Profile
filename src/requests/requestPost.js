@@ -1,11 +1,6 @@
 // src/requests/requestPost.js
-
 const API_BASE_URL = 'https://dummyjson.com';
 
-/**
- * دریافت پست‌ها از API
- * @returns {Promise<Array>} آرایه‌ای از پست‌ها
- */
 export const fetchPosts = async () => {
   try {
     const response = await fetch(`${API_BASE_URL}/posts?limit=10`);
@@ -19,6 +14,8 @@ export const fetchPosts = async () => {
     // فرمت کردن پست‌های دریافتی برای سازگاری با ساختار برنامه
     const formattedPosts = data.posts.map(post => ({
       ...post,
+      code: `POST-${post.id}`, // کد مخصوص
+      price: Math.floor(Math.random() * 100) + 10, // قیمت رندوم 10-110
       excerpt: post.body.substring(0, 100) + '...',
       image: `https://picsum.photos/400/200?random=${post.id}`,
       content: post.body
@@ -31,31 +28,7 @@ export const fetchPosts = async () => {
   }
 };
 
-/**
- * ایجاد پست جدید
- * @param {Object} postData - داده‌های پست جدید
- * @returns {Promise<Object>} پست ایجاد شده
- */
-export const createPost = async (postData) => {
-  try {
-    const response = await fetch(`${API_BASE_URL}/posts/add`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(postData)
-    });
-    
-    if (!response.ok) {
-      throw new Error(`خطا در ایجاد پست: ${response.status}`);
-    }
-    
-    return await response.json();
-  } catch (error) {
-    console.error('Error creating post:', error);
-    throw error;
-  }
-};
+
 
 /**
  * به‌روزرسانی پست

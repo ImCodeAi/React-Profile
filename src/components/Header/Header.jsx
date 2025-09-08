@@ -1,4 +1,3 @@
-// src/components/Header/Header.jsx
 import React, { useState, useEffect } from 'react';
 import {
   AppBar,
@@ -17,7 +16,8 @@ import {
   ListItemText,
   Divider,
   useMediaQuery,
-  useTheme
+  useTheme,
+  Badge
 } from "@mui/material";
 import {
   GitHub,
@@ -25,16 +25,22 @@ import {
   LinkedIn,
   Brightness4,
   Brightness7,
-  Menu as MenuIcon
+  Menu as MenuIcon,
+  ShoppingCart
 } from "@mui/icons-material";
+import { useCart } from '../../contexts/CartContext';
+import CartDrawer from '../CartDrawer/CartDrawer';
 import avatarImg from "../../assets/logoai.png";
 import "./Header.css";
+
 
 const Header = ({ dark, setDark }) => {
   const [scrollProgress, setScrollProgress] = useState(0);
   const [drawerOpen, setDrawerOpen] = useState(false);
+  const [cartOpen, setCartOpen] = useState(false);
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
+  const { getCartItemsCount } = useCart();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -61,8 +67,20 @@ const Header = ({ dark, setDark }) => {
     setDrawerOpen(open);
   };
 
+  const toggleCart = (open) => (event) => {
+    if (event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
+      return;
+    }
+    setCartOpen(open);
+  };
+
   const menuItems = (
     <>
+      <IconButton aria-label="cart" color="inherit" onClick={toggleCart(true)}>
+        <Badge badgeContent={getCartItemsCount()} color="secondary">
+          <ShoppingCart />
+        </Badge>
+      </IconButton>
       <FormControlLabel
         control={
           <Switch
@@ -112,6 +130,14 @@ const Header = ({ dark, setDark }) => {
           <ListItemText primary={dark ? "تم تاریک" : "تم روشن"} />
         </ListItem>
         <Divider />
+        <ListItem button onClick={toggleCart(true)}>
+          <ListItemIcon>
+            <Badge badgeContent={getCartItemsCount()} color="secondary">
+              <ShoppingCart />
+            </Badge>
+          </ListItemIcon>
+          <ListItemText primary="سبد خرید" />
+        </ListItem>
         <ListItem button component="a" href="https://github.com" target="_blank">
           <ListItemIcon>
             <GitHub />
@@ -206,14 +232,21 @@ const Header = ({ dark, setDark }) => {
 
           {/* موبایل و تبلت */}
           {isMobile && (
-            <IconButton
-              color="inherit"
-              aria-label="open menu"
-              onClick={toggleDrawer(true)}
-              className="menu-button"
-            >
-              <MenuIcon />
-            </IconButton>
+            <Stack direction="row" alignItems="center" spacing={1}>
+              <IconButton aria-label="cart" color="inherit" onClick={toggleCart(true)}>
+                <Badge badgeContent={getCartItemsCount()} color="secondary">
+                  <ShoppingCart />
+                </Badge>
+              </IconButton>
+              <IconButton
+                color="inherit"
+                aria-label="open menu"
+                onClick={toggleDrawer(true)}
+                className="menu-button"
+              >
+                <MenuIcon />
+              </IconButton>
+            </Stack>
           )}
         </Toolbar>
       </AppBar>
@@ -246,7 +279,9 @@ const Header = ({ dark, setDark }) => {
         {drawerContent}
       </Drawer>
 
-
+      {/* Drawer سبد خرید */}
+      
+      <CartDrawer open={cartOpen} onClose={toggleCart(false)} />
     </>
   );
 };
