@@ -49,22 +49,7 @@ const PostCard = ({ post, onOpen, fullWidth = false }) => {
             onError={handleImageError}
           />
           
-          {/* افکت لودینگ فقط موقعی که تصویر اصلی در حال لود شدنه */}
-          {!imageLoaded && !imageError && (
-            <Box 
-              sx={{
-                position: 'absolute',
-                top: 0,
-                left: 0,
-                right: 0,
-                bottom: 0,
-                background: 'linear-gradient(90deg, rgba(240,240,240,0.5) 25%, rgba(224,224,224,0.5) 50%, rgba(240,240,240,0.5) 75%)',
-                backgroundSize: '200% 100%',
-                animation: 'loading 1.5s infinite',
-                backdropFilter: 'blur(2px)'
-              }}
-            />
-          )}
+          
         </Box>
         <CardContent className="post-card-content">
           <Typography variant="h6" className="post-title" noWrap>

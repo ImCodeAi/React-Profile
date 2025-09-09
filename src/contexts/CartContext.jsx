@@ -1,5 +1,5 @@
 // src/contexts/CartContext.jsx
-import React, { createContext, useContext, useState } from 'react';
+import React, { createContext, useContext, useState, useEffect } from 'react';
 
 const CartContext = createContext();
 
@@ -13,6 +13,24 @@ export const useCart = () => {
 
 export const CartProvider = ({ children }) => {
   const [cartItems, setCartItems] = useState([]);
+
+  // بارگذاری سبد خرید از session storage هنگام mount
+  useEffect(() => {
+    const savedCart = sessionStorage.getItem('cartItems');
+    if (savedCart) {
+      try {
+        setCartItems(JSON.parse(savedCart));
+      } catch (error) {
+        console.error('Error parsing cart items:', error);
+        sessionStorage.removeItem('cartItems');
+      }
+    }
+  }, []);
+
+  // ذخیره سبد خرید در session storage هنگام تغییر
+  useEffect(() => {
+    sessionStorage.setItem('cartItems', JSON.stringify(cartItems));
+  }, [cartItems]);
 
   const addToCart = (item) => {
     setCartItems(prevItems => {
@@ -44,6 +62,7 @@ export const CartProvider = ({ children }) => {
 
   const clearCart = () => {
     setCartItems([]);
+    sessionStorage.removeItem('cartItems');
   };
 
   const getCartTotal = () => {
@@ -69,8 +88,4 @@ export const CartProvider = ({ children }) => {
       {children}
     </CartContext.Provider>
   );
-};
-
-const clearCart = () => {
-  setCartItems([]);
 };

@@ -22,6 +22,9 @@ import './CartDrawer.css';
 const CartDrawer = ({ open, onClose }) => {
   const { cartItems, removeFromCart, updateQuantity, clearCart, getCartTotal } = useCart();
 
+  // محاسبه تعداد کل آیتم‌ها (با در نظر گرفتن quantity هر محصول)
+  const totalItemsCount = cartItems.reduce((total, item) => total + item.quantity, 0);
+
   const handleRemoveItem = (itemId) => {
     removeFromCart(itemId);
   };
@@ -55,7 +58,7 @@ const CartDrawer = ({ open, onClose }) => {
         {/* هدر */}
         <Box className="cart-header">
           <Typography variant="h5" className="cart-title">
-            🛒 سبد خرید
+            🛒 سبد خرید ({totalItemsCount})
           </Typography>
           <IconButton onClick={onClose} className="close-btn">
             <Close />
@@ -80,6 +83,20 @@ const CartDrawer = ({ open, onClose }) => {
             <List className="cart-items-list">
               {cartItems.map((item) => (
                 <ListItem key={item.id} className="cart-item">
+                  {/* عکس محصول */}
+                  {item.image && (
+                    <Box className="item-image-container">
+                      <img 
+                        src={item.image} 
+                        alt={item.title}
+                        className="item-image"
+                        onError={(e) => {
+                          e.target.style.display = 'none';
+                        }}
+                      />
+                    </Box>
+                  )}
+                  
                   <Box className="item-content">
                     <Typography variant="subtitle1" className="item-title" title={item.title}>
                       {item.title}
@@ -134,7 +151,7 @@ const CartDrawer = ({ open, onClose }) => {
           <Box className="cart-footer">
             <Box className="items-count-footer">
               <Typography variant="body2" className="items-count-text">
-                {cartItems.length} آیتم در سبد شما
+                {totalItemsCount} آیتم در سبد شما
               </Typography>
             </Box>
             
@@ -173,3 +190,4 @@ const CartDrawer = ({ open, onClose }) => {
 };
 
 export default CartDrawer;
+

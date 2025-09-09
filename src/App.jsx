@@ -50,7 +50,7 @@ function App() {
   const [profile, setProfile] = useState(INITIAL_PROFILE);
   const [previewLogo, setPreviewLogo] = useState(null);
   const [editOpen, setEditOpen] = useState(false);
-  const [initialLoading, setInitialLoading] = useState(true);
+  const [initialLoading, setInitialLoading] = useState(false);
   const [posts, setPosts] = useState(POSTS);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -146,42 +146,42 @@ function App() {
     return posts.filter(p => p.title.toLowerCase().includes(q));
   }, [query, posts]);
 
-  // لودینگ اولیه全局
-  if (initialLoading) {
-    return (
-      <ThemeProvider theme={theme}>
-        <CssBaseline />
-        <GlobalStyles
-          styles={{
-            body: {
-              backgroundColor: dark ? '#1a1a1a' : '#f5f5f5',
-              margin: 0,
-              padding: 0,
-              minHeight: '100vh',
-              overflow: 'hidden'
-            }
-          }}
-        />
-        <Box
-          sx={{
-            position: 'fixed',
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-            backgroundColor: dark ? '#1a1a1a' : '#f5f5f5',
-            zIndex: 9999
-          }}
-          data-theme={dark ? "dark" : "light"}
-        >
-          <Loader />
-        </Box>
-      </ThemeProvider>
-    );
-  }
+  // // لودینگ اولیه全局
+  // if (initialLoading) {
+  //   return (
+  //     <ThemeProvider theme={theme}>
+  //       <CssBaseline />
+  //       <GlobalStyles
+  //         styles={{
+  //           body: {
+  //             backgroundColor: dark ? '#1a1a1a' : '#f5f5f5',
+  //             margin: 0,
+  //             padding: 0,
+  //             minHeight: '100vh',
+  //             overflow: 'hidden'
+  //           }
+  //         }}
+  //       />
+  //       <Box
+  //         sx={{
+  //           position: 'fixed',
+  //           top: 0,
+  //           left: 0,
+  //           right: 0,
+  //           bottom: 0,
+  //           display: 'flex',
+  //           justifyContent: 'center',
+  //           alignItems: 'center',
+  //           backgroundColor: dark ? '#1a1a1a' : '#f5f5f5',
+  //           zIndex: 9999
+  //         }}
+  //         data-theme={dark ? "dark" : "light"}
+  //       >
+  //         <Loader />
+  //       </Box>
+  //     </ThemeProvider>
+  //   );
+  // }
 
   return (
     <CartProvider>
@@ -261,7 +261,7 @@ function App() {
                       gap: 2,
                       mt: 3
                     }}>
-                      {[1, 2, 3, 4, 5].map((item) => (
+                      {[1, 2, 3, 4, 5 , 6].map((item) => (
                         <PostSkeleton key={item} />
                       ))}
                     </Box>
